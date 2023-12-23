@@ -1,9 +1,9 @@
 <template>
   <div>
     <div>
-      <PageComponent title="Dashboard" />
+      <PageComponent title="Settings" />
       <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <p>Hello Dash</p>
+        <p>Settings</p>
       </div>
     </div>
   </div>

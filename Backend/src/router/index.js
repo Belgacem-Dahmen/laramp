@@ -10,6 +10,8 @@ import Demandes from "../views/Demandes.vue";
 import Formations from "../views/Formations.vue";
 import Exports from "../views/Exports.vue";
 import notFound from "../views/notFound.vue";
+import Settings from "../views/Settings.vue";
+import Profile from "../views/Profile.vue";
 import { useUserStore } from "../stores/userStore";
 
 const routes = [
@@ -20,7 +22,7 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
-        path: "/",
+        path: "/Dashboard",
         name: "Dashboard",
         component: Dashboard,
       },
@@ -44,12 +46,23 @@ const routes = [
         name: "Exports",
         component: Exports,
       },
+      {
+        path: "/profile",
+        name: "Profile",
+        component: Profile,
+      },
+      {
+        path: "/settings",
+        name: "Settings",
+        component: Settings,
+      },
     ],
   },
   {
     path: "/auth",
     redirect: "/login",
     name: "Auth",
+    meta: { isGuest: true },
     component: DefaultLayout,
     children: [
       {
@@ -83,14 +96,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const user = useUserStore();
-  // instead of having to check every route record with
-  // to.matched.some(record => record.meta.requiresAuth)
-  if (to.meta.requiresAuth && !user.isLoggedIn) {
+
+  if (to.meta.requiresAuth && !user.token) {
+    console.log(user.token);
     next({ name: "Login" });
-  } else if (
-    (user.isLoggedIn && to.name === "Login") ||
-    to.name === "Register"
-  ) {
+  } else if (user.token && (to.name === "Login" || to.name === "Register")) {
     next({ name: "Dashboard" });
   } else {
     next();
